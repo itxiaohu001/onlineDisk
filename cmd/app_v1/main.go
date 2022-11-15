@@ -20,10 +20,14 @@ func main() {
 	// 表单上传账号密码信息
 	router.POST("/login/content", login.SubmitContent)
 	// 表单操作上传文件
-	router.POST("/upload/content",upload.UploadFile)
+	router.POST("/upload/content", upload.UploadFile)
 	// 展示用户的文件
 	router.GET("/showfiles", display.ShowFiles)
 	// 下载指定名字的文件
 	router.GET("/download", download.DownloadFile)
+	// 上传文件分块存储
+	router.POST("/upload/block", upload.UploadBlock)
+	// 查看图片
+	router.GET("/showpng/block", display.ShowPng)
 	router.Run(":8080")
 }
