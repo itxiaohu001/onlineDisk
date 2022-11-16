@@ -4,21 +4,21 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"onlineDisk/module"
+	"onlineDisk/model"
 	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
-var ShowFiles = func(c *gin.Context) {
-	_, e := os.Stat(module.SaveDir)
+func ShowFiles(c *gin.Context) {
+	_, e := os.Stat(model.SaveDir)
 	if e != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": e.Error(),
 		})
 		return
 	} else {
-		fes, _ := os.ReadDir(module.SaveDir)
+		fes, _ := os.ReadDir(model.SaveDir)
 		list := []string{}
 		for _, fe := range fes {
 			list = append(list, fe.Name())
@@ -29,11 +29,11 @@ var ShowFiles = func(c *gin.Context) {
 	}
 }
 
-var ShowPng = func(c *gin.Context) {
+func ShowPng(c *gin.Context) {
 	c.Writer.Header().Set("Transfer-encoding", "chunked")
 	c.Writer.Header().Set("Content-type", "image/png")
-	for i := 0; i <= module.BlockNum; i++ {
-		f, err := os.Open(module.SaveDir + fmt.Sprintf("file_%d", i))
+	for i := 0; i <= model.BlockNum; i++ {
+		f, err := os.Open(model.SaveDir + fmt.Sprintf("file_%d", i))
 		if err != nil {
 			panic(err)
 		}

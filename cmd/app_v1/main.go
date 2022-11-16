@@ -10,6 +10,11 @@ import (
 )
 
 func main() {
+	router := register()
+	router.Run(":8080")
+}
+
+func register() *gin.Engine {
 	router := gin.Default()
 	// 处理multipart forms提交文件时默认的内存限制是32 MiB
 	// 可以通过下面的方式修改
@@ -29,5 +34,5 @@ func main() {
 	router.POST("/upload/block", upload.UploadBlock)
 	// 查看图片
 	router.GET("/showpng/block", display.ShowPng)
-	router.Run(":8080")
+	return router
 }

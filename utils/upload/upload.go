@@ -5,13 +5,13 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"onlineDisk/module"
+	"onlineDisk/model"
 	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
-var UploadFile = func(c *gin.Context) {
+func UploadFile(c *gin.Context) {
 	// 单个文件
 	file, err := c.FormFile("f1")
 	if err != nil {
@@ -21,7 +21,7 @@ var UploadFile = func(c *gin.Context) {
 		return
 	}
 	log.Println(file.Filename)
-	dst := fmt.Sprintf(module.SaveDir+"%s", file.Filename)
+	dst := fmt.Sprintf(model.SaveDir+"%s", file.Filename)
 	// 上传文件到指定的目录
 	c.SaveUploadedFile(file, dst)
 	c.JSON(http.StatusOK, gin.H{
@@ -30,7 +30,7 @@ var UploadFile = func(c *gin.Context) {
 }
 
 // 分成块存储
-var UploadBlock = func(c *gin.Context) {
+func UploadBlock(c *gin.Context) {
 	file, head, err := c.Request.FormFile("f1")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -39,7 +39,7 @@ var UploadBlock = func(c *gin.Context) {
 		return
 	}
 	// 每个块的大小
-	block := head.Size / module.BlockNum
+	block := head.Size / model.BlockNum
 	buf := make([]byte, block)
 	i := 0
 	for {
@@ -50,7 +50,7 @@ var UploadBlock = func(c *gin.Context) {
 		if err != nil && err != io.EOF {
 			panic(err)
 		}
-		dst := module.SaveDir + fmt.Sprintf("file_%d", i)
+		dst := model.SaveDir + fmt.Sprintf("file_%d", i)
 		if err := saveToDst(dst, buf); err != nil {
 			panic(err)
 		}
