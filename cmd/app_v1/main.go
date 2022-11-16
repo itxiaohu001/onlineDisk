@@ -9,9 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
-	router := register()
-	router.Run(":8080")
+func main() { 
+	register().Run(":8080")
 }
 
 func register() *gin.Engine {

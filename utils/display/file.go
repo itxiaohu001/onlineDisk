@@ -30,8 +30,11 @@ func ShowFiles(c *gin.Context) {
 }
 
 func ShowPng(c *gin.Context) {
+	// 分块编码
 	c.Writer.Header().Set("Transfer-encoding", "chunked")
+	// 图片类型
 	c.Writer.Header().Set("Content-type", "image/png")
+	// 这里是模拟将分块数据写入http连接
 	for i := 0; i <= model.BlockNum; i++ {
 		f, err := os.Open(model.SaveDir + fmt.Sprintf("file_%d", i))
 		if err != nil {
